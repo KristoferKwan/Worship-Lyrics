@@ -151,7 +151,11 @@ def get_lyrics(song):
     '''
     # find the song page url
     azLyricsUrlList = search_azlyrics(song)
+    if(azLyricsUrlList == None): 
+        print("ERROR: {:s} does not exist in lyrics directory".format(song))
+        return song
     numberSong = int(input("\n\nEnter the index of the desired song (within python list) where 0 is the first element: "))
+    
     print(azLyricsUrlList[numberSong])
     azLyricsUrl = azLyricsUrlList[numberSong]
     # get list of lyrics from azlyrics.com
@@ -209,22 +213,15 @@ def add_slide(prs, text):
     p.font.color.rgb = COLOR
     p.alignment = PP_ALIGN.CENTER
 
-    # width = height = Inches(1.8)
-    # top = Inches(1.5)
-    # left = Inches(4)
-    # txBox = slide.shapes.add_textbox(left, top, width, height)
-    # tf = txBox.text_frame
-    # print("\nThe following is the textframe settings:",tf.auto_size, tf.word_wrap)   
-    # p = tf.add_paragraph()
-    # p.text = text
-    # p.font.color.rgb = COLOR
-    # p.alignment = PP_ALIGN.CENTER
-    
-    # print (text)
-    # print ('------------------')
-    # p.font.size = Pt(30) 
-    # p.font.bold = False   
-    # p.font.name = 'Helvetica'
+    pPr = p._element.get_or_add_pPr()
+    pPr.set("marL", "0")
+    pPr.set("indent", "0")
+    pPr.set("algn", "ctr")
+    buNone = pPr._add_buNone()
+
+    p.font.size = Pt(30) 
+    p.font.bold = False   
+    p.font.name = 'Helvetica'
     
 def make_power_point(text, title):
     '''
@@ -254,7 +251,7 @@ def make_power_point(text, title):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("More args")
+        print("More args. NOTE: you can append mutliple songs together via comma in command line")
         sys.exit(1)
     elif sys.argv[1] == '-w':
         COLOR = WHITE_COLOR
